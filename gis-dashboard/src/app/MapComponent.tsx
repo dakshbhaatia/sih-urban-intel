@@ -3,31 +3,35 @@
 import { useEffect, useRef } from "react";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { Incident } from "./page";
+import type { Incident } from "./page";
 
-const hazardIcon = new L.Icon({
-  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-  iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
-  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41],
-});
+// Guard Leaflet Icon initialization so it only runs in the browser
+let hazardIcon: L.Icon | null = null;
+if (typeof window !== "undefined") {
+  hazardIcon = new L.Icon({
+    iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
+    shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+  });
+}
 
 const createBusIcon = (busId: string) => {
-  return L.divIcon({
+  if (typeof window === "undefined" || !L) return null as any;
+  return L.divIcon({const createBusIcon = (busId: string) => {
+    if (typeof window === "undefined" || !L) return null as any;
+    return L.divIcon({
     className: "bus-custom-marker",
     html: `
       <div style="display: flex; flex-direction: column; align-items: center; pointer-events: none;">
-        <div style="background: rgba(13, 17, 23, 0.95); border: 1px solid #00f2fe; color: #00f2fe; font-family: monospace; font-size: 9px; padding: 1px 4px; border-radius: 3px; font-weight: bold; white-space: nowrap; margin-bottom: 2px; box-shadow: 0 0 6px rgba(0, 242, 254, 0.4);">
+        <div style="background: rgba(13, 17, 23, 0.95); border: 1px solid #00f2fe; color: #00f2fe; font-family: monospace; font-size: 10px; padding: 2px 6px; border-radius: 4px; white-space: nowrap; margin-bottom: 4px; box-shadow: 0 0 10px rgba(0,242,254,0.3);">
           ${busId}
         </div>
-        <div style="width: 14px; height: 14px; background: #00e676; border: 2px solid #ffffff; border-radius: 50%; box-shadow: 0 0 8px #00e676;"></div>
+        <div style="width: 14px; height: 14px; background: #00f2fe; border: 2px solid #ffffff; border-radius: 50%; box-shadow: 0 0 12px #00f2fe;"></div>
       </div>
     `,
-    iconSize: [60, 30],
-    iconAnchor: [30, 24],
+    iconSize: [40, 40],
+    iconAnchor: [20, 35],
   });
 };
 
