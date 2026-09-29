@@ -1,9 +1,21 @@
 "use client";
 
-import { parsePoint } from "./MapComponent";
 import { useEffect, useState, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { Shield, Radio, Activity, AlertTriangle, Cpu, MapPin, X, CheckCircle, Navigation } from "lucide-react";
+
+export function parsePoint(pointStr: string): [number, number] {
+  try {
+    const match = pointStr.match(/\(([^)]+)\)/);
+    if (match) {
+      const [lng, lat] = match[1].split(" ").map(Number);
+      return [lat, lng];
+    }
+  } catch (e) {
+    console.error("Failed to parse point:", e);
+  }
+  return [28.6139, 77.209]; // fallback coordinates
+}
 
 const MapComponent = dynamic(() => import("./MapComponent"), {
   ssr: false,
@@ -24,7 +36,6 @@ export interface Incident {
   location?: string;
   created_at?: string;
 }
-
 function extractCoords(locStr?: any): [number, number] {
   return parsePoint(locStr);
 }

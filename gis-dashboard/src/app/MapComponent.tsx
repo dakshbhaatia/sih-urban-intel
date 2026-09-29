@@ -18,9 +18,7 @@ if (typeof window !== "undefined") {
 
 const createBusIcon = (busId: string) => {
   if (typeof window === "undefined" || !L) return null as any;
-  return L.divIcon({const createBusIcon = (busId: string) => {
-    if (typeof window === "undefined" || !L) return null as any;
-    return L.divIcon({
+  return L.divIcon({
     className: "bus-custom-marker",
     html: `
       <div style="display: flex; flex-direction: column; align-items: center; pointer-events: none;">
@@ -28,8 +26,7 @@ const createBusIcon = (busId: string) => {
           ${busId}
         </div>
         <div style="width: 14px; height: 14px; background: #00f2fe; border: 2px solid #ffffff; border-radius: 50%; box-shadow: 0 0 12px #00f2fe;"></div>
-      </div>
-    `,
+      </div>`,
     iconSize: [40, 40],
     iconAnchor: [20, 35],
   });
